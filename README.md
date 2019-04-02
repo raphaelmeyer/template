@@ -8,5 +8,6 @@
 
 ## TODO
 
-    - clang format
+- clang format
+- ci (travis, ...)
 
