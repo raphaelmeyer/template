@@ -1,0 +1,105 @@
+#!/bin/bash
+
+script_dir="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+project_root="$(cd "${script_dir}/.." >/dev/null 2>&1 && pwd )"
+
+usage()
+{
+    echo "Usage"
+    echo ""
+    echo "  $(basename ${0}) [options] [-- [cmake options]]"
+    echo ""
+    echo "Options"
+    echo ""
+    echo "  -h --help                        Print usage information and exit."
+    echo "  -c --compiler=clang|gcc|auto     Select compiler. Default is 'clang'."
+    echo "  -g --generator=<generator-name>  Specify a build system generator."
+    echo "                                   Default is 'Ninja'."
+    echo "  -t --target=<tgt>                Build <tgt> instead of default targets."
+    echo ""
+}
+
+error()
+{
+    (>&2 echo "$(tput setaf 1)error$(tput sgr0): ${1}")
+    exit 1
+}
+
+args=$(getopt \
+    --name $(basename ${0}) \
+    --options "hc:g:t:" \
+    --longopt "help" \
+    --longopt "compiler:" \
+    --longopt "generator:" \
+    --longopt "target:" \
+    -- "${@}")
+
+if [ $? != 0 ] ; then
+    usage
+    exit 1
+fi
+
+compiler="clang"
+generator="Ninja"
+target=""
+
+eval set -- "${args}"
+while true ; do
+    case "${1}" in
+        -h|--help)
+            usage
+            exit 0
+            ;;
+
+        -c|--compiler)
+            compiler="${2}"
+            shift
+            ;;
+
+        -g|--generator)
+            generator="${2}"
+            shift
+            ;;
+
+        -t|--target)
+            target="--target ${2}"
+            shift
+            ;;
+
+        --)
+            shift
+            break
+            ;;
+    esac
+    shift
+done
+
+case "${compiler}" in
+    gcc)
+        export CC=gcc
+        export CXX=g++
+        ;;
+
+    clang|default)
+        export CC=clang
+        export CXX=clang++
+        ;;
+
+    auto)
+        ;;
+
+    *)
+        error "unsupported compiler '${compiler}'"
+        ;;
+esac
+
+build_dir="${project_root}/_build-${compiler}"
+
+if [ ! -d "${build_dir}" ] ; then
+    mkdir -p "${build_dir}"
+    cd "${build_dir}"
+    cmake "${project_root}" -G "${generator}" $*
+fi
+
+cmake --build "${build_dir}" ${target}
+
