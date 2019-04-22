@@ -8,5 +8,5 @@ compiler:
   - clang
   - gcc
 
-script: ./scripts/build
+script: ./scripts/build -c auto
 
