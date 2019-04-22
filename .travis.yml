@@ -7,5 +7,5 @@ compiler:
   - clang
   - gcc
 
-script: ./build
+script: ./scripts/build
 
