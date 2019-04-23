@@ -3,30 +3,21 @@ language: cpp
 
 matrix:
   include:
-    - addons:
+    - compiler: gcc
+      addons:
+        apt:
+          packages:
+            - ninja-build
+
+    - compiler: clang
+      addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
             - ninja-build
-            - g++-7
-      env:
-        - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
+            - libstdc++-7-dev
 
-    - addons:
-        apt:
-          sources:
-            - llvm-toolchain-xenial-8
-          packages:
-            - ninja-build
-            - clang-8
-            - libc++-8-dev
-      env:
-        - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
-        - CXXFLAGS="-stdlib=libc++"
-
-before_install:
-  - eval "${MATRIX_EVAL}"
 
 script: ./scripts/build -c auto
 
