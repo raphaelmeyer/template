@@ -1,4 +1,4 @@
-set(CATCH_VERSION "v2.7.0")
+set(CATCH_VERSION "v2.7.2")
 
 include(ExternalProject)
 ExternalProject_Add(fetch-catch
