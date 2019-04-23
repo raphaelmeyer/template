@@ -20,6 +20,7 @@ matrix:
           packages:
             - ninja-build
             - clang-8
+            - libc++-8-dev
       env:
         - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
 
