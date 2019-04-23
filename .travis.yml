@@ -1,32 +1,30 @@
 dist: xenial
 language: cpp
 
-addons:
-  apt:
-    packages:
-      - ninja-build
-
 matrix:
   include:
-    - compiler: gcc
-      addons:
+    - addons:
         apt:
           sources:
             - ubuntu-toolchain-r-test
           packages:
+            - ninja-build
             - g++-7
       env:
         - MATRIX_EVAL="CC=gcc-7 && CXX=g++-7"
 
-    - compiler: clang
-      addons:
+    - addons:
         apt:
           sources:
             - llvm-toolchain-xenial-8
           packages:
+            - ninja-build
             - clang-8
       env:
         - MATRIX_EVAL="CC=clang-8 && CXX=clang++-8"
+
+before_install:
+  - eval "${MATRIX_EVAL}"
 
 script: ./scripts/build -c auto
 
