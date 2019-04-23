@@ -11,7 +11,8 @@ matrix:
     - compiler: gcc
     - compiler: clang
       env:
-        - EXTRA_FLAGS="-stdlib=libc++"
+        - CXXFLAGS="-stdlib=libc++"
+        - LINKER_FLAGS="-stdlib=libc++"
 
 script: ./scripts/build -c auto
 
