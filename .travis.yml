@@ -12,7 +12,7 @@ matrix:
     - compiler: clang
       env:
         - CXXFLAGS="-stdlib=libc++"
-        - LINKER_FLAGS="-stdlib=libc++"
+        - LDFLAGS="-stdlib=libc++"
 
 script: ./scripts/build -c auto
 
