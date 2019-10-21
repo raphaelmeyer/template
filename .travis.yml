@@ -1,10 +1,14 @@
 dist: bionic
 language: cpp
 
-matrix:
-  include:
-    - compiler: gcc
-    - compiler: clang
+compiler:
+  - gcc
+  - clang
+
+addons:
+  apt:
+    packages:
+      - ninja-build
 
 script: ./scripts/build -c auto
 
